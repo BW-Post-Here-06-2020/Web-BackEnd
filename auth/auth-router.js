@@ -12,7 +12,6 @@ function createToken(user){
     const payload = {
       subject: user.id,
       username: user.username,
-      department: user.department
     };
     const secret = constants.jwtSecret
     const options = {
@@ -21,6 +20,23 @@ function createToken(user){
     return jwt.sign(payload, secret, options)
   }
 
+// auth function
+  function auth(req, res, next) {
+    jwt.verify(req.headers.authorization, secret.jwtSecret, function (
+      err,
+      decoded
+    ) {
+      if (err) {
+        res.status(400).json({ error: 'not logged in' });
+      } else {
+        req.token = decoded;
+        next();
+      }
+    });
+  }
+    
+
+//Register new user
   router.post("/register", (req, res) => {
     const credentials = req.body;
   
@@ -66,7 +82,63 @@ router.post("/login", (req, res) => {
       });
     }
   });
-  
+
+  //get a list of users
+  router.get('/', (req, res) => {
+    User.find()
+      .then((users) => {
+        res.status(200).json(users);
+      })
+      .catch((err) => res.send(err));
+  });
+
+  //get a user by id
+router.get('/:id', (req, res) => {
+  User.findbyid(req.params.id)
+    .then((user) => {
+      res.status(200).json(user);
+    })
+    .catch((err) => {
+      res.status(500).json({ err: err.message });
+    });
+});
+
+//update user by id 
+router.put('/:id', auth, (req, res) => {
+  const { password, new_password, phone } = req.body;
+
+  User.findbyid(req.params.id)
+    .then((found) => {
+      if (found && bcrypt.compareSync(password, found.password)) {
+        const hash = bcrypt.hashSync(new_password, 12);
+        User.update(req.params.id, {
+          password: hash,
+          phone,
+        }).then((updatedUser) => {
+          res.status(200).json({ message: 'updated user info', updatedUser });
+        });
+      } else {
+        res.status(500).json({ err: 'unable to update password/phone' });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: err.message });
+    });
+});
+
+//delete user by id 
+router.delete('/:id', auth, (req, res) => {
+  const { id } = req.params;
+  User.remove({ id })
+    .then((deleted) => {
+      res.status(200).json({ message: 'user deleted', deleted });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: err.message });
+    });
+});
   
   module.exports = router;
   
