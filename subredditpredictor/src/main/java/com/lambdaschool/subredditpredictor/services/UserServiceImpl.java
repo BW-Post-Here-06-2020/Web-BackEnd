@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Transactional
 @Service(value = "userService")
 public class UserServiceImpl implements UserService {
@@ -16,6 +19,18 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private RoleService roleService;
+
+	@Override
+	public List<User> findAll() {
+		List<User> list = new ArrayList<>();
+
+		userRepo
+			.findAll()
+			.iterator()
+			.forEachRemaining(list::add);
+
+		return list;
+	}
 
 	@Override
 	public User save(User user) {

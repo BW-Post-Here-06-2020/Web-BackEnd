@@ -1,6 +1,7 @@
 package com.lambdaschool.subredditpredictor.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -26,6 +27,7 @@ public class User extends Audit {
 	// private String primaryEmail;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties(value = "user", allowSetters = true)
 	private List<UserRole> roles = new ArrayList<>();
 
 	public User() {
