@@ -1,5 +1,7 @@
 package com.lambdaschool.subredditpredictor.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
@@ -81,5 +83,17 @@ public class User extends Audit {
 
 	public void addRole(Role role) {
 		roles.add(new UserRole(this, role));
+	}
+
+	@JsonIgnore
+	public List<SimpleGrantedAuthority> getAuthority() {
+		List<SimpleGrantedAuthority> rtnList = new ArrayList<>();
+
+		for (UserRole r : this.roles) {
+			String role = "ROLE_" + r.getRole().getName().toUpperCase();
+			rtnList.add(new SimpleGrantedAuthority(role));
+		}
+
+		return rtnList;
 	}
 }
