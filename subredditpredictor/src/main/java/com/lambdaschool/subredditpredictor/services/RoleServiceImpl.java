@@ -1,5 +1,6 @@
 package com.lambdaschool.subredditpredictor.services;
 
+import com.lambdaschool.subredditpredictor.exceptions.ResourceNotFoundException;
 import com.lambdaschool.subredditpredictor.models.Role;
 import com.lambdaschool.subredditpredictor.models.UserRole;
 import com.lambdaschool.subredditpredictor.repositories.RoleRepository;
@@ -25,6 +26,13 @@ public class RoleServiceImpl implements RoleService {
 			.iterator()
 			.forEachRemaining(list::add);
 		return list;
+	}
+
+	@Override
+	public Role findRoleById(long id) {
+		return roleRepo
+			.findById(id)
+			.orElseThrow(() -> new ResourceNotFoundException("role " + id + " not found"));
 	}
 
 	@Transactional
