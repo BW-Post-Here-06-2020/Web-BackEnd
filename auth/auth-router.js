@@ -26,13 +26,10 @@ function createToken(user){
   
     if (isValid(credentials)) {
       const rounds = process.env.BCRYPT_ROUNDS || 8;
-  
-      // hash the password
-      const hash = bcryptjs.hashSync(credentials.password, rounds);
+      const hash = bcryptjs.hashSync(credentials.password, rounds);       // hash the password
       credentials.password = hash;
-  
-      // save the user to the database
-      Users.add(credentials)
+
+      Users.add(credentials)        // save the user to the database
         .then(user => {
           res.status(201).json({ data: user });
         })
