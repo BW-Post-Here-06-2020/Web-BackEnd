@@ -8,20 +8,7 @@ exports.up = function (knex) {
         users.string('password', 20).notNullable();
         users.integer('phone', 11).notNullable();
       })
-  
-      .createTable('posts', (posts) => {
-        posts.increments();
-        posts.string('name', 50).notNullable();
-        posts.string('description', 225).notNullable();
-        posts.string('date', 10).notNullable();
-        posts
-          .integer('user_id')
-          .notNullable()
-          .unsigned()
-          .references('id')
-          .inTable('users')
-          .onDelete('CASCADE');
-      });
+
   };
   
   exports.down = function (knex) {
