@@ -37,6 +37,7 @@ public class User extends Audit {
 	public User(String username, String password, String primaryEmail, List<UserRole> userRoles) {
 		setUsername(username);
 		setPassword(password);
+		setPrimaryEmail(primaryEmail);
 		for (UserRole ur : userRoles) {
 			ur.setUser(this);
 		}
