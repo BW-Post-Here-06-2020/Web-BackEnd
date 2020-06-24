@@ -54,4 +54,13 @@ public class Role extends Audit {
 	public void setUsers(List<UserRole> users) {
 		this.users = users;
 	}
+
+	@Override
+	public String toString() {
+		return "Role{" +
+			"roleId=" + roleId +
+			", name='" + name + '\'' +
+			", users=" + users +
+			'}';
+	}
 }

@@ -112,4 +112,15 @@ public class User extends Audit {
 
 		return rtnList;
 	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+			"userId=" + userId +
+			", username='" + username + '\'' +
+			", password='" + password + '\'' +
+			", primaryEmail='" + primaryEmail + '\'' +
+			", roles=" + roles +
+			'}';
+	}
 }
