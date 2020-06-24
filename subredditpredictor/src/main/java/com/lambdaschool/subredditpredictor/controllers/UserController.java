@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,5 +24,12 @@ public class UserController {
 	public ResponseEntity<?> getAllUsers() {
 		List<User> allUsers = userService.findAll();
 		return new ResponseEntity<>(allUsers, HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@GetMapping(value = "/user/{userid}", produces = {"application/json"})
+	public ResponseEntity<?> getUserById(@PathVariable long userid) {
+		User user = userService.findUserById(userid);
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 }

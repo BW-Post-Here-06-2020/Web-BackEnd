@@ -1,5 +1,6 @@
 package com.lambdaschool.subredditpredictor.services;
 
+import com.lambdaschool.subredditpredictor.exceptions.ResourceNotFoundException;
 import com.lambdaschool.subredditpredictor.models.Role;
 import com.lambdaschool.subredditpredictor.models.User;
 import com.lambdaschool.subredditpredictor.models.UserRole;
@@ -30,6 +31,13 @@ public class UserServiceImpl implements UserService {
 			.forEachRemaining(list::add);
 
 		return list;
+	}
+
+	@Override
+	public User findUserById(long id) {
+		return userRepo
+			.findById(id)
+			.orElseThrow(() -> new ResourceNotFoundException("user " + id + " not found"));
 	}
 
 	@Transactional

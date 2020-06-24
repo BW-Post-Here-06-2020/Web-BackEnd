@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,5 +24,12 @@ public class RoleController {
 	public ResponseEntity<?> getAllRoles() {
 		List<Role> allRoles = roleService.findAll();
 		return new ResponseEntity<>(allRoles, HttpStatus.OK);
+	}
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@GetMapping(value = "/role/{roleid}", produces = {"application/json"})
+	public ResponseEntity<?> getRoleById(@PathVariable long roleid) {
+		Role role = roleService.findRoleById(roleid);
+		return new ResponseEntity<>(role, HttpStatus.OK);
 	}
 }
