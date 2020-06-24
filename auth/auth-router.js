@@ -22,7 +22,7 @@ function createToken(user){
 
 // auth function
   function auth(req, res, next) {
-    jwt.verify(req.headers.authorization, secret.jwtSecret, function (
+    jwt.verify(req.headers.authorization, constants.jwtSecret, function (
       err,
       decoded
     ) {
@@ -85,7 +85,7 @@ router.post("/login", (req, res) => {
 
   //get a list of users
   router.get('/', (req, res) => {
-    User.find()
+    Users.find()
       .then((users) => {
         res.status(200).json(users);
       })
@@ -94,7 +94,7 @@ router.post("/login", (req, res) => {
 
   //get a user by id
 router.get('/:id', (req, res) => {
-  User.findbyid(req.params.id)
+  Users.findById(req.params.id)
     .then((user) => {
       res.status(200).json(user);
     })
@@ -107,30 +107,37 @@ router.get('/:id', (req, res) => {
 router.put('/:id', auth, (req, res) => {
   const { password, new_password, phone } = req.body;
 
-  User.findbyid(req.params.id)
+  if(isValid(req.body)){
+    Users.findById(req.params.id)
     .then((found) => {
-      if (found && bcrypt.compareSync(password, found.password)) {
-        const hash = bcrypt.hashSync(new_password, 12);
-        User.update(req.params.id, {
+      console.log(found)
+      if (found && bcryptjs.compareSync(password, found.password)) {
+        const rounds = process.env.BCRYPT_ROUNDS || 8;
+        const hash = bcryptjs.hashSync(new_password, rounds);
+        Users.Update(req.params.id, {
           password: hash,
           phone,
-        }).then((updatedUser) => {
+        })
+        .then((updatedUser) => {
           res.status(200).json({ message: 'updated user info', updatedUser });
         });
       } else {
+        console.log(res)
         res.status(500).json({ err: 'unable to update password/phone' });
+    
       }
     })
     .catch((err) => {
       console.log(err);
       res.status(500).json({ message: err.message });
     });
+  }
 });
 
 //delete user by id 
 router.delete('/:id', auth, (req, res) => {
   const { id } = req.params;
-  User.remove({ id })
+  Users.remove({ id })
     .then((deleted) => {
       res.status(200).json({ message: 'user deleted', deleted });
     })

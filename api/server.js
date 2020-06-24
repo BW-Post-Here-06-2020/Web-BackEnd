@@ -12,8 +12,8 @@ server.use(express.json());
 
 server.use('/api/users', usersRouter)
 
-server.get("/", (req, res) => {
-    res.json({ api: "up"})
-})
+// server.get("/", (req, res) => {
+//     res.json({ api: "up"})
+// })
 
 module.exports = server

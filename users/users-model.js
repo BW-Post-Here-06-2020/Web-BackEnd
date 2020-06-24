@@ -6,6 +6,8 @@ module.exports = {
     findBy,
     findById,
     getAll,
+    Update,
+    remove,
 };
 
 function getAll() {
@@ -35,3 +37,12 @@ function findById(id) {
         id
     }).first();
 }
+
+async function Update(id, changes) {
+    await db('users').where({ id }).update(changes);
+    return findById(id);
+  }
+
+  function remove(id) {
+    return db('users').where(id).del();
+  }
