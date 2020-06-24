@@ -73,7 +73,5 @@ public class OpenController {
 		String theToken = restTemplate.postForObject(requestURI, request, String.class);
 
 		return new ResponseEntity<>(theToken, responseHeaders, HttpStatus.CREATED);
-
-		// return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
 	}
 }

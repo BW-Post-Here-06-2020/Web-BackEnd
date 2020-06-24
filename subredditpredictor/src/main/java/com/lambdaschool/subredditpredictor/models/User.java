@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +23,9 @@ public class User extends Audit {
 	@Column(nullable = false)
 	private String password;
 
-	// @Column(nullable = false, unique = true)
-	// @Email
-	// private String primaryEmail;
+	@Column(nullable = false, unique = true)
+	@Email
+	private String primaryEmail;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties(value = "user", allowSetters = true)
@@ -33,7 +34,7 @@ public class User extends Audit {
 	public User() {
 	}
 
-	public User(String username, String password, List<UserRole> userRoles) {
+	public User(String username, String password, String primaryEmail, List<UserRole> userRoles) {
 		setUsername(username);
 		setPassword(password);
 		for (UserRole ur : userRoles) {
@@ -73,6 +74,18 @@ public class User extends Audit {
 	public void setPassword(String password) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		this.password = passwordEncoder.encode(password);
+	}
+
+	public String getPrimaryEmail() {
+		if (primaryEmail == null) {
+			return null;
+		} else {
+			return primaryEmail.toLowerCase();
+		}
+	}
+
+	public void setPrimaryEmail(String primaryEmail) {
+		this.primaryEmail = primaryEmail.toLowerCase();
 	}
 
 	public List<UserRole> getRoles() {
