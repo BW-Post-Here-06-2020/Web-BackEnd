@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserService {
 		return list;
 	}
 
+	@Transactional
 	@Override
 	public User save(User user) {
 		User newUser = new User();

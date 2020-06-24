@@ -35,6 +35,17 @@ public class RoleServiceImpl implements RoleService {
 			.orElseThrow(() -> new ResourceNotFoundException("role " + id + " not found"));
 	}
 
+	@Override
+	public Role findRoleByName(String name) {
+		Role role = roleRepo.findByNameIgnoreCase(name);
+
+		if (role != null) {
+			return role;
+		} else {
+			throw new ResourceNotFoundException("role " + name + " not found");
+		}
+	}
+
 	@Transactional
 	@Override
 	public Role save(Role role) {
