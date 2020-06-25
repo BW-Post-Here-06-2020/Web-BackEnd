@@ -45,7 +45,7 @@ public class OpenController {
 
 		newUser = userService.save(newUser);
 
-		HttpHeaders responseHeaders = new HttpHeaders();
+		HttpHeaders resHeaders = new HttpHeaders();
 		URI newUserURI = ServletUriComponentsBuilder
 			// .fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/user/{userid}")
 			.fromUriString(
@@ -55,7 +55,7 @@ public class OpenController {
 			)
 			.buildAndExpand(newUser.getUserId())
 			.toUri();
-		responseHeaders.setLocation(newUserURI);
+		resHeaders.setLocation(newUserURI);
 
 		RestTemplate restTemplate = new RestTemplate();
 		String port = "";
@@ -83,6 +83,6 @@ public class OpenController {
 
 		String theToken = restTemplate.postForObject(requestURI, request, String.class);
 
-		return new ResponseEntity<>(theToken, responseHeaders, HttpStatus.CREATED);
+		return new ResponseEntity<>(theToken, resHeaders, HttpStatus.CREATED);
 	}
 }

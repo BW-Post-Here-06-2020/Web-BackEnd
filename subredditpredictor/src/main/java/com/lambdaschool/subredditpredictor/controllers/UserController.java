@@ -32,4 +32,6 @@ public class UserController {
 		User user = userService.findUserById(userid);
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
+
+
 }

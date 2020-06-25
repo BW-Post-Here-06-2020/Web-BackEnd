@@ -1,5 +1,6 @@
 package com.lambdaschool.subredditpredictor.services;
 
+import com.lambdaschool.subredditpredictor.exceptions.ResourceFoundException;
 import com.lambdaschool.subredditpredictor.exceptions.ResourceNotFoundException;
 import com.lambdaschool.subredditpredictor.models.Role;
 import com.lambdaschool.subredditpredictor.models.UserRole;
@@ -49,12 +50,9 @@ public class RoleServiceImpl implements RoleService {
 	@Transactional
 	@Override
 	public Role save(Role role) {
-		// Role newRole = new Role();
-		// newRole.setName(role.getName());
-		// newRole.getUsers().clear();
-		// for (UserRole ur : role.getUsers()) {
-		//
-		// }
+		if (role.getUsers().size() > 0) {
+			throw new ResourceFoundException("user roles not updated through role");
+		}
 
 		return roleRepo.save(role);
 	}
