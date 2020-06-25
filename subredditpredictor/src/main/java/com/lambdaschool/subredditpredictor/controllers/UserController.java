@@ -37,4 +37,10 @@ public class UserController {
 		userService.save(updateUser);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
+	@PatchMapping(value = "/user/{userid}", consumes = {"application/json"})
+	public ResponseEntity<?> updateUser(@Valid @RequestBody User updateUser, @PathVariable long userid) {
+		userService.update(userid, updateUser);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }

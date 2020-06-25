@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 		newUser.getPosts().clear();
 		if (user.getPosts().size() == 0) {
 			for (Post p : user.getPosts()) {
-				newUser.getPosts().add(new Post(newUser, p.getTitle(), p.getPostBody()));
+				newUser.addPost(new Post(newUser, p.getTitle(), p.getPostBody()));
 			}
 		}
 
