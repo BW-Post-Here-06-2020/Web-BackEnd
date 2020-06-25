@@ -48,13 +48,16 @@ public class OpenController {
 		HttpHeaders responseHeaders = new HttpHeaders();
 		URI newUserURI = ServletUriComponentsBuilder
 			// .fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/user/{userid}")
-			.fromUriString("http://" + (httpServletRequest.getServerName().equalsIgnoreCase("localhost") ? (":" + httpServletRequest.getLocalPort()) : (httpServletRequest.getServerName() + "/users/user/{userid}")))
+			.fromUriString(
+				"http://" + (httpServletRequest.getServerName().equalsIgnoreCase("localhost") ?
+				(":" + httpServletRequest.getLocalPort()) + "/users/user/{userid}" :
+				(httpServletRequest.getServerName() + "/users/user/{userid}"))
+			)
 			.buildAndExpand(newUser.getUserId())
 			.toUri();
 		responseHeaders.setLocation(newUserURI);
 
 		RestTemplate restTemplate = new RestTemplate();
-		// String requestURI = "http://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/login";
 		String port = "";
 		if (httpServletRequest.getServerName().equalsIgnoreCase("localhost")) {
 			port = ":" + httpServletRequest.getLocalPort();

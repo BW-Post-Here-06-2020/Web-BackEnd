@@ -1,5 +1,7 @@
 package com.lambdaschool.subredditpredictor.config;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ExitCodeGenerator;
@@ -31,42 +33,34 @@ public class DataSourceConfig {
 
 	@Bean(name = "dsCustom")
 	public DataSource dataSource() {
-		String myUrlString = "";
-		String myDriverClass = "";
-		String myDBUser = "";
-		String myDBPassword = "";
-
 		String dbValue = env.getProperty("local.run.db");
 
 		if (dbValue.equalsIgnoreCase("POSTGRESQL")) {
-			checkEnvironmentVariable("MYDBHOST");
-			checkEnvironmentVariable("MYDBNAME");
-			checkEnvironmentVariable("MYDBUSER");
-			checkEnvironmentVariable("MYDBPASSWORD");
+			checkEnvironmentVariable("DATABASE_URL");
 
 			if (stop) {
 				int exitCode = SpringApplication.exit(appContext, (ExitCodeGenerator) () -> 1);
 				System.exit(exitCode);
 			}
 
-			myUrlString = "jdbc:postgresql://" + System.getenv("MYDBHOST") + ":5432/" + System.getenv("MYDBNAME");
-			myDriverClass = "org.postgresql.Driver";
-			myDBUser = System.getenv("MYDBUSER");
-			myDBPassword = System.getenv("MYDBPASSWORD");
-		} else {
-			myUrlString = "jdbc:h2:mem:testdb";
-			myDriverClass = "org.h2.Driver";
-			myDBUser = "sa";
-			myDBPassword = "";
-		}
+			String dbUrl = env.getProperty("DATABASE_URL");
 
-		return DataSourceBuilder
-			.create()
-			.username(myDBUser)
-			.password(myDBPassword)
-			.url(myUrlString)
-			.driverClassName(myDriverClass)
-			.build();
+			HikariConfig config = new HikariConfig();
+			config.setJdbcUrl(dbUrl);
+			return new HikariDataSource(config);
+		} else {
+			String myUrlString = "jdbc:h2:mem:testdb";
+			String myDriverClass = "org.h2.Driver";
+			String myDBUser = "sa";
+			String myDBPassword = "";
+
+			return DataSourceBuilder.create()
+				.username(myDBUser)
+				.password(myDBPassword)
+				.url(myUrlString)
+				.driverClassName(myDriverClass)
+				.build();
+		}
 	}
 
 	@Bean(name = "jdbcCustom")
