@@ -36,14 +36,14 @@ public class RoleController {
 
 	@PostMapping(value = "/role", consumes = {"application/json"})
 	public ResponseEntity<?> createNewRole(@Valid @RequestBody Role newRole) {
-		newRole.setRoleId(0);
+		newRole.setRoleid(0);
 		newRole = roleService.save(newRole);
 
 		HttpHeaders resHeaders = new HttpHeaders();
 		URI newRoleURI = ServletUriComponentsBuilder
 			.fromCurrentRequest()
 			.path("/{roleid}")
-			.buildAndExpand(newRole.getRoleId())
+			.buildAndExpand(newRole.getRoleid())
 			.toUri();
 		resHeaders.setLocation(newRoleURI);
 
@@ -51,7 +51,8 @@ public class RoleController {
 	}
 
 	@PutMapping(value = "/role/{roleid}", consumes = {"application/json"})
-	public ResponseEntity<?> editFullRole(@PathVariable long roleid, @Valid @RequestBody Role role) {
-		return null;
+	public ResponseEntity<?> updateFullRole(@PathVariable long roleid, @Valid @RequestBody Role role) {
+		Role updateRole = roleService.update(roleid, role);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

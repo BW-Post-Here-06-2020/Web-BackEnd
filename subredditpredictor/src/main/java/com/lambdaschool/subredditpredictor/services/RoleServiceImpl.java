@@ -18,6 +18,9 @@ public class RoleServiceImpl implements RoleService {
 	@Autowired
 	private RoleRepository roleRepo;
 
+	@Autowired
+	private UserAudit userAudit;
+
 	@Override
 	public List<Role> findAll() {
 		List<Role> list = new ArrayList<>();
@@ -55,5 +58,21 @@ public class RoleServiceImpl implements RoleService {
 		}
 
 		return roleRepo.save(role);
+	}
+
+	@Transactional
+	@Override
+	public Role update(long id, Role role) {
+		if (role.getName() == null) {
+			throw new ResourceNotFoundException("role name needed to update");
+		}
+		if (role.getUsers().size() > 0) {
+			throw new ResourceFoundException("user roles not updated through role");
+		}
+
+		Role newRole = findRoleById(id);
+		roleRepo.updateRoleName(userAudit.getCurrentAuditor().get(), id, role.getName());
+
+		return findRoleById(id);
 	}
 }

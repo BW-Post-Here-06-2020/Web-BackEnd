@@ -11,7 +11,7 @@ import java.util.List;
 public class Post extends Audit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long postId;
+	private long postid;
 
 	@Column(nullable = false)
 	private String title;
@@ -36,12 +36,12 @@ public class Post extends Audit {
 		setPostBody(postBody);
 	}
 
-	public long getPostId() {
-		return postId;
+	public long getPostid() {
+		return postid;
 	}
 
-	public void setPostId(long postId) {
-		this.postId = postId;
+	public void setPostid(long postId) {
+		this.postid = postId;
 	}
 
 	public String getTitle() {
@@ -83,7 +83,7 @@ public class Post extends Audit {
 	@Override
 	public String toString() {
 		return "Post{" +
-			"postId=" + postId +
+			"postId=" + postid +
 			", title='" + title + '\'' +
 			", postBody='" + postBody + '\'' +
 			", subreddits=" + subreddits +

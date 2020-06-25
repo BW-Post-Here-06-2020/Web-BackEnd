@@ -11,7 +11,7 @@ import java.util.List;
 public class Subreddit extends Audit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long subId;
+	private long subid;
 
 	@Column(nullable = false, unique = true)
 	private String subName;
@@ -31,12 +31,12 @@ public class Subreddit extends Audit {
 		this.posts = subPosts;
 	}
 
-	public long getSubId() {
-		return subId;
+	public long getSubid() {
+		return subid;
 	}
 
-	public void setSubId(long subId) {
-		this.subId = subId;
+	public void setSubid(long subId) {
+		this.subid = subId;
 	}
 
 	public String getSubName() {
@@ -66,7 +66,7 @@ public class Subreddit extends Audit {
 	@Override
 	public String toString() {
 		return "Subreddit{" +
-			"subId=" + subId +
+			"subId=" + subid +
 			", subName='" + subName + '\'' +
 			", posts=" + posts +
 			'}';

@@ -15,7 +15,7 @@ import java.util.List;
 public class User extends Audit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long userId;
+	private long userid;
 
 	@Column(nullable = false, unique = true)
 	private String username;
@@ -44,12 +44,12 @@ public class User extends Audit {
 		this.roles = userRoles;
 	}
 
-	public long getUserId() {
-		return userId;
+	public long getUserid() {
+		return userid;
 	}
 
-	public void setUserId(long userId) {
-		this.userId = userId;
+	public void setUserid(long userId) {
+		this.userid = userId;
 	}
 
 	public String getUsername() {
@@ -116,7 +116,7 @@ public class User extends Audit {
 	@Override
 	public String toString() {
 		return "User{" +
-			"userId=" + userId +
+			"userId=" + userid +
 			", username='" + username + '\'' +
 			", password='" + password + '\'' +
 			", primaryEmail='" + primaryEmail + '\'' +

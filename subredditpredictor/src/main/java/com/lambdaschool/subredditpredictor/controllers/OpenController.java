@@ -53,7 +53,7 @@ public class OpenController {
 				(":" + httpServletRequest.getLocalPort()) + "/users/user/{userid}" :
 				(httpServletRequest.getServerName() + "/users/user/{userid}"))
 			)
-			.buildAndExpand(newUser.getUserId())
+			.buildAndExpand(newUser.getUserid())
 			.toUri();
 		resHeaders.setLocation(newUserURI);
 
