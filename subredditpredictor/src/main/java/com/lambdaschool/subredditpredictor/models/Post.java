@@ -31,7 +31,8 @@ public class Post extends Audit {
 	public Post() {
 	}
 
-	public Post(String title, String postBody) {
+	public Post(User user, String title, String postBody) {
+		setUser(user);
 		setTitle(title);
 		setPostBody(postBody);
 	}

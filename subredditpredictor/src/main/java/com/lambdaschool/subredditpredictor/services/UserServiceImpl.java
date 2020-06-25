@@ -1,9 +1,8 @@
 package com.lambdaschool.subredditpredictor.services;
 
 import com.lambdaschool.subredditpredictor.exceptions.ResourceNotFoundException;
-import com.lambdaschool.subredditpredictor.models.Role;
-import com.lambdaschool.subredditpredictor.models.User;
-import com.lambdaschool.subredditpredictor.models.UserRole;
+import com.lambdaschool.subredditpredictor.handlers.HelperFunctions;
+import com.lambdaschool.subredditpredictor.models.*;
 import com.lambdaschool.subredditpredictor.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private RoleService roleService;
+
+	@Autowired
+	private HelperFunctions helper;
 
 	@Override
 	public List<User> findAll() {
@@ -45,11 +47,25 @@ public class UserServiceImpl implements UserService {
 	public User save(User user) {
 		User newUser = new User();
 
-		// if statement
+		if (user.getUserid() != 0) {
+			User oldUser = userRepo
+				.findById(user.getUserid())
+				.orElseThrow(() -> new ResourceNotFoundException("user " + user.getUserid() + " not found"));
+			oldUser.getRoles().clear();
+			newUser.setUserid(user.getUserid());
+		}
 
 		newUser.setUsername(user.getUsername());
 		newUser.setPasswordNoEncrypt(user.getPassword());
 		newUser.setPrimaryEmail(user.getPrimaryEmail());
+
+		newUser.getPosts().clear();
+		if (user.getPosts().size() == 0) {
+			for (Post p : user.getPosts()) {
+				newUser.getPosts().add(new Post(newUser, p.getTitle(), p.getPostBody()));
+			}
+		}
+
 		newUser.getRoles().clear();
 		if (user.getUserid() == 0) {
 			for (UserRole ur : user.getRoles()) {
@@ -60,5 +76,42 @@ public class UserServiceImpl implements UserService {
 		}
 
 		return userRepo.save(newUser);
+	}
+
+	@Transactional
+	@Override
+	public User update(long id, User user) {
+		User currentUser = findUserById(id);
+
+		if (helper.isAuthorizedToMakeChange(user.getUsername())) {
+			if (user.getUsername() != null) {
+				currentUser.setUsername(user.getUsername().toLowerCase());
+			}
+
+			if (user.getPassword() != null) {
+				currentUser.setPasswordNoEncrypt(user.getPassword());
+			}
+
+			if (user.getPrimaryEmail() != null) {
+				currentUser.setPrimaryEmail(user.getPrimaryEmail().toLowerCase());
+			}
+
+			if (user.getPosts().size() > 0) {
+				currentUser.getPosts().clear();
+				for (Post p : user.getPosts()) {
+					currentUser.getPosts().add(new Post(currentUser, p.getTitle(), p.getPostBody()));
+				}
+			}
+
+			if (user.getRoles().size() > 0) {
+				currentUser.getRoles().clear();
+				for (UserRole ur : user.getRoles()) {
+					currentUser.getRoles().add(ur);
+				}
+			}
+			return userRepo.save(currentUser);
+		} else {
+			throw new ResourceNotFoundException("user not authorized to make this change");
+		}
 	}
 }

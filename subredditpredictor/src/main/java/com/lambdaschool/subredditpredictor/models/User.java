@@ -29,6 +29,10 @@ public class User extends Audit {
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties(value = "user", allowSetters = true)
+	private List<Post> posts = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties(value = "user", allowSetters = true)
 	private List<UserRole> roles = new ArrayList<>();
 
 	public User() {
@@ -89,12 +93,24 @@ public class User extends Audit {
 		this.primaryEmail = primaryEmail.toLowerCase();
 	}
 
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
+	}
+
 	public List<UserRole> getRoles() {
 		return roles;
 	}
 
 	public void setRoles(List<UserRole> roles) {
 		this.roles = roles;
+	}
+
+	public void addPost(Post post) {
+		posts.add(post);
 	}
 
 	public void addRole(Role role) {
