@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
-@Component
+// @Component
 public class SeedData implements CommandLineRunner {
 	@Autowired
 	private RoleService roleService;

@@ -1,5 +1,6 @@
 package com.lambdaschool.subredditpredictor.services;
 
+import com.lambdaschool.subredditpredictor.exceptions.ResourceFoundException;
 import com.lambdaschool.subredditpredictor.exceptions.ResourceNotFoundException;
 import com.lambdaschool.subredditpredictor.handlers.HelperFunctions;
 import com.lambdaschool.subredditpredictor.models.*;
@@ -83,7 +84,7 @@ public class UserServiceImpl implements UserService {
 	public User update(long id, User user) {
 		User currentUser = findUserById(id);
 
-		if (helper.isAuthorizedToMakeChange(user.getUsername())) {
+		if (helper.isAuthorizedToMakeChange(findUserById(id).getUsername())) {
 			if (user.getUsername() != null) {
 				currentUser.setUsername(user.getUsername().toLowerCase());
 			}
@@ -111,7 +112,7 @@ public class UserServiceImpl implements UserService {
 			}
 			return userRepo.save(currentUser);
 		} else {
-			throw new ResourceNotFoundException("user not authorized to make this change");
+			throw new ResourceFoundException("user not authorized to make this change");
 		}
 	}
 
