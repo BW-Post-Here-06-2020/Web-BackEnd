@@ -23,12 +23,8 @@ public class Subreddit extends Audit {
 	public Subreddit() {
 	}
 
-	public Subreddit(String subName, List<SubPost> subPosts) {
+	public Subreddit(String subName) {
 		setSubName(subName);
-		for (SubPost sp : subPosts) {
-			sp.setSubreddit(this);
-		}
-		this.posts = subPosts;
 	}
 
 	public long getSubid() {

@@ -13,13 +13,13 @@ public class Post extends Audit {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long postid;
 
-	@Column(nullable = false)
+	@Column()
 	private String title;
 
-	@Column(nullable = false)
+	@Column()
 	private String postBody;
 
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnoreProperties(value = "post", allowSetters = true)
 	private List<SubPost> subreddits = new ArrayList<>();
 
@@ -79,6 +79,10 @@ public class Post extends Audit {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public void addSubreddit(Subreddit sub) {
+		subreddits.add(new SubPost(sub, this));
 	}
 
 	@Override

@@ -1,9 +1,9 @@
 package com.lambdaschool.subredditpredictor;
 
-import com.lambdaschool.subredditpredictor.models.Role;
-import com.lambdaschool.subredditpredictor.models.User;
-import com.lambdaschool.subredditpredictor.models.UserRole;
+import com.lambdaschool.subredditpredictor.models.*;
+import com.lambdaschool.subredditpredictor.services.PostService;
 import com.lambdaschool.subredditpredictor.services.RoleService;
+import com.lambdaschool.subredditpredictor.services.SubredditService;
 import com.lambdaschool.subredditpredictor.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -21,6 +21,12 @@ public class SeedData implements CommandLineRunner {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private PostService postService;
+
+	@Autowired
+	private SubredditService subService;
 
 	@Override
 	public void run(String[] args) throws Exception {
@@ -42,5 +48,11 @@ public class SeedData implements CommandLineRunner {
 		user2Roles.add(new UserRole(new User(), r2));
 		User user2 = new User("user", "password", "email2@email.com", user2Roles);
 		userService.save(user2);
+
+		Subreddit testSub = new Subreddit("r/bingus");
+		subService.save(testSub);
+
+		Post testPost = new Post(user2, "title", "body");
+		postService.save(userService.findUserById(5), testSub, testPost);
 	}
 }
