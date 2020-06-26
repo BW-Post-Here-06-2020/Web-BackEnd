@@ -75,4 +75,12 @@ public class RoleServiceImpl implements RoleService {
 
 		return findRoleById(id);
 	}
+
+	@Override
+	public void delete(long id) {
+		roleRepo
+			.findById(id)
+			.orElseThrow(() -> new ResourceNotFoundException("role " + id + " not found"));
+		roleRepo.deleteById(id);
+	}
 }

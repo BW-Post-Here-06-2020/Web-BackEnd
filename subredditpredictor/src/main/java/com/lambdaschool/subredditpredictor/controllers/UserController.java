@@ -43,4 +43,10 @@ public class UserController {
 		userService.update(userid, updateUser);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
+	@DeleteMapping(value = "/user/{userid}")
+	public ResponseEntity<?> deleteUserById(@PathVariable long userid) {
+		userService.delete(userid);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }

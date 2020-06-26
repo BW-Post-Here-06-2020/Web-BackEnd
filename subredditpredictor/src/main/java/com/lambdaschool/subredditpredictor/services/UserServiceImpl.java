@@ -49,8 +49,8 @@ public class UserServiceImpl implements UserService {
 
 		if (user.getUserid() != 0) {
 			User oldUser = userRepo
-				.findById(user.getUserid())
-				.orElseThrow(() -> new ResourceNotFoundException("user " + user.getUserid() + " not found"));
+							   .findById(user.getUserid())
+							   .orElseThrow(() -> new ResourceNotFoundException("user " + user.getUserid() + " not found"));
 			oldUser.getRoles().clear();
 			newUser.setUserid(user.getUserid());
 		}
@@ -113,5 +113,13 @@ public class UserServiceImpl implements UserService {
 		} else {
 			throw new ResourceNotFoundException("user not authorized to make this change");
 		}
+	}
+
+	@Override
+	public void delete(long id) {
+		userRepo
+			.findById(id)
+			.orElseThrow(() -> new ResourceNotFoundException("user " + id + " not found"));
+		userRepo.deleteById(id);
 	}
 }

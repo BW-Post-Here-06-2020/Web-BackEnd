@@ -10,4 +10,6 @@ public interface PostService {
 	List<Post> findAllPosts();
 
 	Post save(User user, Subreddit sub, Post post);
+
+	void delete(long id);
 }

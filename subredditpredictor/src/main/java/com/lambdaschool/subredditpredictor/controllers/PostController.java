@@ -5,9 +5,7 @@ import com.lambdaschool.subredditpredictor.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +19,11 @@ public class PostController {
 	public ResponseEntity<?> getAllPosts() {
 		List<Post> allPosts = postService.findAllPosts();
 		return new ResponseEntity<>(allPosts, HttpStatus.OK);
+	}
+
+	@DeleteMapping(value = "/post/{postid}")
+	public ResponseEntity<?> deleteUserById(@PathVariable long postid) {
+		postService.delete(postid);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

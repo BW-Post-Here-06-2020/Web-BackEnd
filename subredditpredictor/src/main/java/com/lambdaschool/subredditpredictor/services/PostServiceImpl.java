@@ -68,4 +68,12 @@ public class PostServiceImpl implements PostService {
 
 		return postRepo.save(newPost);
 	}
+
+	@Override
+	public void delete(long id) {
+		postRepo
+			.findById(id)
+			.orElseThrow(() -> new ResourceNotFoundException("post " + id + " not found"));
+		postRepo.deleteById(id);
+	}
 }
